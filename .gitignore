@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+__pycache__
+
 *.py[cod]
 *$py.class
 env/
@@ -32,6 +34,7 @@ mlruns/2/
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+secrets/
 
 # Installer logs
 pip-log.txt
