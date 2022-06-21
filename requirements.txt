@@ -1,0 +1,16 @@
+future
+Pygments
+pip
+toml
+wheel
+cryptography
+certifi
+setuptools
+pandas
+numpy
+mlflow
+sklearn
+scikit-learn
+from_root
+boto3
+mysqlclient
