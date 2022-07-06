@@ -20,6 +20,17 @@ logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'secrets/mlops-353417-0d6234ccd6b9.json'
+#
+# path = 'gs://trainingdatamlops'
+# repo = 'https://github.com/sam2881/mlops_codecommit'
+# version ='v1'
+#
+# data_url = dvc.api.get_url(
+#     path=path,
+#     repo=repo,
+#     rev=version
+# )
+# print(data_url)
 
 def eval_metrics(actual, pred):
     rmse = np.sqrt(mean_squared_error(actual, pred))
