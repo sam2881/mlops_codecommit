@@ -1,6 +1,4 @@
 [core]
     remote = google-storage
-['remote "dvc-remote"']
-    url = gs://trainingdatamlops/
 ['remote "google-storage"']
-    url = gs://murillodigital-dvc/data
+    url = gs://trainingdatamlops
