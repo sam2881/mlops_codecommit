@@ -11,7 +11,7 @@ from sklearn.linear_model import ElasticNet
 from urllib.parse import urlparse
 import mlflow
 import mlflow.sklearn
-# import dvc.api
+import dvc.api
 import logging
 # import tensorflow as tf
 from utils import upload
@@ -20,17 +20,18 @@ logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'secrets/mlops-353417-0d6234ccd6b9.json'
-#
-# path = 'gs://trainingdatamlops'
-# repo = 'https://github.com/sam2881/mlops_codecommit'
-# version ='v1'
-#
-# data_url = dvc.api.get_url(
-#     path=path,
-#     repo=repo,
-#     rev=version
-# )
-# print(data_url)
+
+path = 'gs://trainingdatamlops/winequality-red.csv'
+repo = 'https://github.com/sam2881/mlops_codecommit'
+version = "v2"
+
+data_url = dvc.api.get_url(
+    path=path,
+    repo=repo,
+    rev=version
+)
+print(data_url)
+
 
 def eval_metrics(actual, pred):
     rmse = np.sqrt(mean_squared_error(actual, pred))
@@ -89,8 +90,8 @@ if __name__ == "__main__":
 
         # mlflow.log_param('data_url', data_url)
         # mlflow.log_param('data_version', version)
-        mlflow.log_param('input_rows' , data.shape[0])
-        mlflow.log_param('input_cols' , data.shape[1])
+        mlflow.log_param('input_rows', data.shape[0])
+        mlflow.log_param('input_cols', data.shape[1])
 
         print(train_x.columns)
         cols_x = pd.DataFrame(list(train_x.columns))
