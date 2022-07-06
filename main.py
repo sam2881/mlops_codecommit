@@ -20,25 +20,17 @@ logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'secrets/mlops-353417-0d6234ccd6b9.json'
-# def initialize_gpu():
-#  if len(tf.config.experimental.list_physical_devices('GPU')) > 0:
-#   tf.config.set_soft_device_placement(True)
-#   tf.debugging.set_log_device_placement(True)
-#   return
-
-
-# path = ''
-# repo = ''
-# version ='V1'
+#
+# path = 'gs://trainingdatamlops'
+# repo = 'https://github.com/sam2881/mlops_codecommit'
+# version ='v1'
 #
 # data_url = dvc.api.get_url(
 #     path=path,
 #     repo=repo,
 #     rev=version
 # )
-
-# mlflow.set_experiment("Demo")
-
+# print(data_url)
 
 def eval_metrics(actual, pred):
     rmse = np.sqrt(mean_squared_error(actual, pred))
@@ -76,9 +68,7 @@ if __name__ == "__main__":
 
     mlflow.set_tracking_uri("postgresql://postgres:mysecretpassword@127.0.0.1:5432/mlops")
 
-    mlflow.set_experiment("Elastic net")
-    experiment = mlflow.get_experiment_by_name("Elastic net")
-    with mlflow.start_run(experiment_id=experiment.experiment_id):
+    with mlflow.start_run():
         lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
         lr.fit(train_x, train_y)
 
@@ -96,7 +86,7 @@ if __name__ == "__main__":
         mlflow.log_metric("rmse", rmse)
         mlflow.log_metric("r2", r2)
         mlflow.log_metric("mae", mae)
-        #
+
         # mlflow.log_param('data_url', data_url)
         # mlflow.log_param('data_version', version)
         mlflow.log_param('input_rows' , data.shape[0])
@@ -104,7 +94,7 @@ if __name__ == "__main__":
 
         print(train_x.columns)
         cols_x = pd.DataFrame(list(train_x.columns))
-        cols_x.to_csv('features.csv' ,header=False ,index=False)
+        cols_x.to_csv('features.csv', header=False, index=False)
         mlflow.log_artifact('features.csv')
 
         # cols_y = pd.DataFrame(list(train_y.cloumns))
@@ -127,22 +117,11 @@ if __name__ == "__main__":
         print(rmse)
         # try:
         #     if input("Push MOdel to GCP (Y or N) : ") == "Y":
-        #         runs = os.path.join(from_root(), 'secrets')
+        #         runs = os.path.join(from_root(), r'C:\Users\Samrat\Desktop\Mlops_CodeCommit\mlruns')
+        #         # runs = r''
+        #         print(runs)
         #         print("Path to artifacts Exists :", os.path.exists(runs))
-        #         status = upload(bucket_name='mlops_models_testing', destination_blob_name= "mlops", source_path_to_file=runs )
+        #         status = upload(bucket_name='modeltesting', destination_blob_name= "mlops", source_path_to_file=runs )
         #         print(status)
         # except Exception as e:
         #     print(f"Error occured :{e.__str__()}")
-
-
-# def get_args():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('--bucket-name', type=str, default='mlops_automatictrainingcicd-aiplatform', help='GCP bucket name')
-#     parser.add_argument('--epochs', type=int, default=3, help='Epochs number')
-#     args = parser.parse_args()
-#     return args
-
-
-# def main():
-#     args = get_args()
-#     start_training(args)

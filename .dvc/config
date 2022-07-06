@@ -1,0 +1,4 @@
+[core]
+    remote = google-storage
+['remote "google-storage"']
+    url = gs://trainingdatamlops
