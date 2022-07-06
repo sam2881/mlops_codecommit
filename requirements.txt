@@ -13,4 +13,6 @@ sklearn
 scikit-learn
 from_root
 boto3
-mysqlclient
+
+google
+pyyaml

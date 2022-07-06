@@ -1,0 +1,49 @@
+properties([pipelineTriggers([githubPush()])])
+pipeline {
+    agent any
+    environment {
+        PROJECT_ID = 'automatictrainingcicd'
+        CLUSTER_NAME = 'training-cluster'
+        LOCATION = 'us-central1-a'
+        CREDENTIALS_ID = 'AutomaticTrainingCICD'
+    }
+    stages {
+        stage('Cloning our GitHub repo') {
+          steps {
+            checkout([
+              $class: 'GitSCM',
+              branches: [[name: 'main']],
+              userRemoteConfigs: [[
+                url: 'https://github.com/sergiovirahonda/AutomaticTraining-CodeCommit.git',
+                credentialsId: '',
+              ]]
+             ])
+           }
+        }
+        stage('Building and pushing image to GCR') {
+            steps {
+                script {
+                    docker.withRegistry('https://gcr.io', 'gcr:AutomaticTrainingCICD') {
+                        app = docker.build('automatictrainingcicd/code-commit:latest')
+                        app.push("latest")
+                    }
+                }
+            }
+        }
+        stage('Deploying to GKE') {
+            steps{
+                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'pod.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            }
+        }
+    }
+    post {
+        unsuccessful {
+            echo 'The Jenkins pipeline execution has failed.'
+            emailext body: "The '${env.JOB_NAME}' job has failed during its execution. Check the logs for more information.", recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'A Jenkins pipeline execution has failed.'
+        }
+        success {
+            echo 'The Jenkins pipeline execution has ended successfully, triggering the next one.'
+            build job: 'AutomaticTraining-UnitTesting', propagate: true, wait: false
+        }
+    }
+}

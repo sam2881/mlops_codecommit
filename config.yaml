@@ -1,9 +1,6 @@
 params:
-  app_name : "mlops-sagemaker"
-  execution_role_arn : 'arn:aws:iam::259768221514:role/mlops-sagemaker-role-123'
-  image_ecr_url : "966180254834.dkr.ecr.ap-south-1.amazonaws.com/mlflow-pyfunc:1.23.1"
-  region : "ap-south-1"
-  s3_bucket_name : "mlops-demo-123"
+  gcp_bucket_name : "mlops_artifacts_1/artifacts/"
   experiment_id : "0"
-  run_id : "25bd95371e2343c2a65947ebc20ad9ec"
+  run_id : "b4cd1748f112475bb23258c895ded89c"
   model_name : "model"
+  model: "model.pickle"

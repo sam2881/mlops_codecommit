@@ -96,11 +96,11 @@ if __name__ == "__main__":
         mlflow.log_metric("rmse", rmse)
         mlflow.log_metric("r2", r2)
         mlflow.log_metric("mae", mae)
-
+        #
         # mlflow.log_param('data_url', data_url)
         # mlflow.log_param('data_version', version)
-        # mlflow.log_param('input_rows' , data.shape[0])
-        # mlflow.log_param('input_cols' , data.shape[1])
+        mlflow.log_param('input_rows' , data.shape[0])
+        mlflow.log_param('input_cols' , data.shape[1])
 
         print(train_x.columns)
         cols_x = pd.DataFrame(list(train_x.columns))
@@ -125,14 +125,14 @@ if __name__ == "__main__":
             mlflow.sklearn.log_model(lr, "model")
 
         print(rmse)
-        try:
-            if input("Push MOdel to GCP (Y or N) : ") == "Y":
-                runs = os.path.join(from_root(), 'secrets')
-                print("Path to artifacts Exists :", os.path.exists(runs))
-                status = upload(bucket_name='mlops_models_testing', destination_blob_name= "mlops", source_path_to_file=runs )
-                print(status)
-        except Exception as e:
-            print(f"Error occured :{e.__str__()}")
+        # try:
+        #     if input("Push MOdel to GCP (Y or N) : ") == "Y":
+        #         runs = os.path.join(from_root(), 'secrets')
+        #         print("Path to artifacts Exists :", os.path.exists(runs))
+        #         status = upload(bucket_name='mlops_models_testing', destination_blob_name= "mlops", source_path_to_file=runs )
+        #         print(status)
+        # except Exception as e:
+        #     print(f"Error occured :{e.__str__()}")
 
 
 # def get_args():
